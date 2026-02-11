@@ -24,7 +24,7 @@ export default function SearchBar({ initialQuery = '', large = false, onSearch }
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search for a product (e.g., Tylenol, eye drops, baby formula)..."
-          className={`w-full rounded-xl border border-gray-300 bg-white shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500 ${large ? 'px-6 py-4 text-lg' : 'px-4 py-3 text-base'} pr-14`}
+          className={`w-full rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500 ${large ? 'px-6 py-4 text-lg' : 'px-4 py-3 text-base'} pr-14`}
           aria-label="Search for a product"
         />
         <button
