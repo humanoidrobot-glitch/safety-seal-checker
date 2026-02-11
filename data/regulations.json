@@ -1,0 +1,142 @@
+[
+  {
+    "code": "21 CFR 211.132",
+    "title": "Tamper-Evident Packaging Requirements for OTC Human Drug Products",
+    "full_text": "Sec. 211.132 Tamper-evident packaging requirements for over-the-counter (OTC) human drug products.\n\n(a) General. Each manufacturer and packer who packages an OTC drug product (except a dermatological, dentifrice, insulin, or lozenge product) for retail sale shall package the product in a tamper-evident package, if this product is accessible to the public while held for sale. A tamper-evident package is one having one or more indicators or barriers to entry which, if breached or missing, can reasonably be expected to provide visible evidence to consumers that tampering has occurred. To reduce the likelihood of successful tampering and to increase the likelihood that consumers will discover if a product has been tampered with, the package is required to be distinctive by design or by the use of one or more indicators or barriers to entry that employ an identifying characteristic (e.g., a pattern, name, registered trademark, logo, or picture). For purposes of this section, the term \"distinctive by design\" means the packaging cannot be duplicated with commonly available materials or through commonly used processes.\n\n(b) Requirements for tamper-evident package. (1) In addition to the tamper-evident packaging feature described in paragraph (a) of this section, each retail package of an OTC drug product covered by this section is required to bear a statement that is prominently placed so that consumers are alerted to the specific tamper-evident feature of the package. The labeling statement is also required to be so placed that it will be unaffected if the tamper-evident feature of the package is breached or missing.\n\n(2) If the tamper-evident feature chosen to meet the requirement in paragraph (a) of this section uses an identifying characteristic, that characteristic is required to be referred to in the labeling statement. For example, the labeling statement on a bottle with a shrink band could say \"For your protection, this bottle has an imprinted seal around the neck.\"\n\n(c) Request for exemptions from packaging and labeling requirements. A manufacturer or packer may request an exemption from the packaging and labeling requirements of this section. A request for an exemption is required to be submitted in the form of a citizen petition under Sec. 10.30 of this chapter and should be clearly identified on the envelope as a \"Request for Exemption from Tamper-Evident Packaging Rule.\" The petition is required to contain the following:\n\n(1) The name of the drug product or, if the petition seeks an exemption for a drug class, the name of the drug class, and a list of products within that class.\n\n(2) The reasons that the drug product's compliance with the tamper-evident packaging or labeling requirements of this section is unnecessary or cannot be achieved.\n\n(3) A description of alternative steps that are available, or that the petitioner has already taken, to reduce the likelihood that the product or drug class will be the subject of malicious adulteration.\n\n(4) Other information justifying an exemption.\n\n(d) OTC drug products subject to approved new drug applications. Holders of approved new drug applications for OTC drug products are required under Sec. 314.70 of this chapter to provide the agency with a supplement to describe any changes in packaging to comply with the requirements of this section.\n\n(e) Poison Prevention Packaging Act of 1970. The requirements of this section are in addition to any requirements of the Poison Prevention Packaging Act of 1970.",
+    "summary": "This regulation requires manufacturers and packers of over-the-counter (OTC) drug products to use tamper-evident packaging with visible indicators or barriers that show evidence of tampering. Packages must bear a prominent statement alerting consumers to the specific tamper-evident feature. Exemptions exist for dermatological products, dentifrices, insulin, and lozenges, and other products may petition for exemption.",
+    "applies_to": [
+      "otc_oral",
+      "otc_nasal",
+      "otc_ophthalmic",
+      "otc_rectal",
+      "otc_vaginal",
+      "otc_otic"
+    ],
+    "exemptions": [
+      "dermatological",
+      "dentifrice",
+      "insulin",
+      "lozenge"
+    ],
+    "source_url": "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-C/part-211/subpart-G/section-211.132",
+    "data_source": "manually_compiled"
+  },
+  {
+    "code": "21 CFR 700.25",
+    "title": "Tamper-Resistant Packaging Requirements for Cosmetic Products",
+    "full_text": "Sec. 700.25 Tamper-resistant packaging requirements for cosmetic products.\n\n(a) General. Each manufacturer or packer who packages a cosmetic liquid oral hygiene product or vaginal product for retail sale shall package the product in a tamper-resistant package, if this product is accessible to the public while held for sale. A tamper-resistant package is one having an indicator or barrier to entry which, if breached or missing, can reasonably be expected to provide visible evidence to consumers that tampering has occurred. To reduce the likelihood of successful tampering and to increase the likelihood that consumers will discover if a product has been tampered with, the package is required to be distinctive by design (e.g., an aerosol product container) or by the use of one or more indicators or barriers to entry that employ an identifying characteristic (e.g., a pattern, name, registered trademark, logo, or picture).\n\n(b) Requirements for tamper-resistant package. In addition to the tamper-resistant packaging feature described in paragraph (a) of this section, each retail package of a cosmetic product covered by this section is required to bear a statement that is prominently placed so that consumers are alerted to the specific tamper-resistant feature of the package. The labeling statement is also required to be so placed that it will be unaffected if the tamper-resistant feature of the package is breached or missing. If the tamper-resistant feature chosen to meet the requirement in paragraph (a) of this section uses an identifying characteristic, that characteristic is required to be referred to in the labeling statement.\n\n(c) Request for exemptions from packaging and labeling requirements. A manufacturer or packer may request an exemption from the packaging and labeling requirements of this section. A request for an exemption is required to be submitted in the form of a citizen petition under Sec. 10.30 of this chapter and should be clearly identified on the envelope as a \"Request for Exemption from the Tamper-Resistant Packaging Rule for Cosmetic Products.\" The petition is required to contain the following:\n\n(1) The name of the product or, if the petition seeks an exemption for a product class, the name of the product class, and a list of products within that class.\n\n(2) The reasons that the product's compliance with the tamper-resistant packaging or labeling requirements of this section is unnecessary or cannot be achieved.\n\n(3) A description of alternative steps that are available, or that the petitioner has already taken, to reduce the likelihood that the product or product class will be the subject of malicious adulteration.\n\n(4) Other information justifying an exemption.",
+    "summary": "This regulation mandates that cosmetic liquid oral hygiene products and vaginal products sold at retail must use tamper-resistant packaging with visible indicators of tampering. Packages must include a prominent labeling statement alerting consumers to the tamper-resistant feature. Manufacturers may petition for exemptions through the citizen petition process.",
+    "applies_to": [
+      "cosmetic_liquid_oral_hygiene",
+      "cosmetic_vaginal"
+    ],
+    "exemptions": [
+      "non_liquid_cosmetics",
+      "aerosol_containers",
+      "products_not_accessible_to_public"
+    ],
+    "source_url": "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-G/part-700/subpart-B/section-700.25",
+    "data_source": "manually_compiled"
+  },
+  {
+    "code": "21 CFR 107",
+    "title": "Infant Formula — Quality, Packaging, and Labeling Requirements",
+    "full_text": "Part 107 — Infant Formula\n\nSubpart A — General Provisions\n\nSec. 107.10 Status and applicability of this part 107.\nThis part prescribes requirements for infant formulas, including quality control procedures, record retention, reporting, and labeling.\n\nSubpart B — Labeling\n\nSec. 107.20 Directions for use.\nThe label of an infant formula shall bear directions for preparation and use of the infant formula, including pictorial directions if the formula requires reconstitution before feeding.\n\nSec. 107.30 Exemptions.\nInfant formula that is represented and labeled for use by an infant who has an inborn error of metabolism or low birth weight, or who otherwise has an unusual medical or dietary problem is exempt from certain labeling requirements.\n\nSubpart C — Exempt Infant Formulas\n\nSec. 107.50 Terms and conditions.\nAn infant formula that is exempt under this section shall comply with the terms and conditions specified herein.\n\nSubpart D — Nutrient Requirements\n\nSec. 107.100 Nutrient specifications.\nAn infant formula shall contain specified nutrients in amounts not less than the minimum level and not more than the maximum level for each 100 kilocalories of the formula as set forth in the tables.\n\nSubpart E — Quality Factors and Testing\n\nSec. 107.160 Packaging and sealing requirements.\nAn infant formula shall be packaged in a container that is sufficient to maintain the safety, quality, and nutrient levels of the formula through the expiration date. The container closure system must provide a hermetic seal, and the manufacturer must use tamper-evident packaging. The packaging must protect against foreseeable risks of contamination, degradation, and tampering during storage, handling, and distribution. Containers for liquid infant formula must be hermetically sealed and processed by heat to maintain commercial sterility.\n\nSec. 107.170 Quality control procedures.\nThe manufacturer shall establish and follow quality control procedures to ensure that each production aggregate of infant formula provides required nutrients and is manufactured in a manner designed to prevent adulteration.\n\nSubpart F — Records and Reports\n\nSec. 107.210 Recall procedures.\nManufacturers of infant formula shall establish and follow written procedures for recalling infant formulas when there is a determination that the formula presents a risk to human health.",
+    "summary": "Part 107 governs infant formula quality, labeling, nutrient requirements, and packaging. It requires that infant formula be packaged in hermetically sealed, tamper-evident containers that maintain safety and nutrient integrity through the expiration date. The regulation also sets nutrient specifications, quality control procedures, and recall requirements for infant formula manufacturers.",
+    "applies_to": [
+      "infant_formula_liquid",
+      "infant_formula_powder",
+      "infant_formula_concentrated"
+    ],
+    "exemptions": [
+      "exempt_infant_formula_inborn_errors",
+      "exempt_infant_formula_low_birth_weight"
+    ],
+    "source_url": "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-107",
+    "data_source": "manually_compiled"
+  },
+  {
+    "code": "16 CFR 1700",
+    "title": "Poison Prevention Packaging Act — Child-Resistant and Tamper-Evident Packaging",
+    "full_text": "Part 1700 — Poison Prevention Packaging\n\nSec. 1700.1 Definitions.\nAs used in this part: (a) \"Special packaging\" means packaging that is designed or constructed to be significantly difficult for children under 5 years of age to open or obtain a toxic or harmful amount of the substance contained therein within a reasonable time and not difficult for normal adults to use properly, but does not mean packaging which all such children cannot open or obtain a toxic or harmful amount within a reasonable time.\n\nSec. 1700.14 Substances requiring special packaging.\n(a) The Commission has determined that the degree or nature of the hazard to children in the availability of the following substances, by reason of their packaging, is such that special packaging meeting the requirements of Sec. 1700.20(a) is required to protect children from serious personal injury or serious illness resulting from handling, using, or ingesting such substances. These include:\n(1) Aspirin and aspirin-containing preparations for human use.\n(2) Furniture polish containing petroleum distillates.\n(3) Methyl salicylate (oil of wintergreen) preparations.\n(4) Controlled substances (Schedule II-IV).\n(5) Sodium and potassium hydroxide preparations.\n(6) Turpentine-containing preparations.\n(7) Kindling and/or illuminating preparations (e.g., charcoal lighter fluid).\n(8) Methanol (methyl alcohol) preparations.\n(9) Sulfuric acid preparations.\n(10) Prescription drugs for human use.\n(11) Ethylene glycol preparations.\n(12) Iron-containing drugs and dietary supplements.\n(13) Dietary supplements containing certain substances.\n(14) Acetaminophen preparations.\n(15) Diphenhydramine preparations.\n(16) Ibuprofen preparations.\n(17) Loperamide preparations.\n(18) Mouthwash containing ethanol.\n(19) Ketoprofen preparations.\n(20) Naproxen preparations.\n(21) Lidocaine preparations in concentration > 5mg.\n(22) Dibucaine preparations.\n(23) Minoxidil preparations.\n(24) Over-the-counter drug preparations containing methacrylic acid.\n(25) Imidazoline-containing preparations.\n(26) Low-viscosity hydrocarbons.\n(27) Nicotine-containing preparations for human use.\n(28) Second generation anticoagulant rodenticide products.\n\nSec. 1700.15 Poison prevention packaging standards.\n(a) In accordance with the act, the Commission has established requirements for the special packaging of hazardous household substances. The special packaging must meet child-resistant effectiveness specifications and must also comply with the applicable adult-use effectiveness specifications.\n(b) The standards require that the packaging be tested in accordance with the protocols set forth in Sec. 1700.20.\n\nSec. 1700.20 Testing procedure for special packaging.\n(a) Child-resistant effectiveness test. Special packaging shall be tested by sequential pairs of children to determine child resistance. The test requires 200 children between the ages of 42 and 51 months. The packaging passes the child-resistant test if not more than 20 percent of the children open it in the first 5-minute test period and not more than 20 percent open it in the total 10-minute test period.\n\n(b) Adult-use effectiveness test. Special packaging shall also be tested to ensure that normal adults can open and close the packaging. The packaging passes the adult test if at least 90 percent of adults can open and properly close the package within 5 minutes.",
+    "summary": "The Poison Prevention Packaging Act regulations require special child-resistant packaging for hazardous household substances including many OTC drugs, prescription drugs, and household chemicals. Packaging must be significantly difficult for children under 5 to open but usable by normal adults. These child-resistant requirements overlap with tamper-evident packaging rules, as many products requiring child-resistant closures also need tamper-evident features.",
+    "applies_to": [
+      "prescription_drugs",
+      "otc_aspirin",
+      "otc_acetaminophen",
+      "otc_ibuprofen",
+      "otc_naproxen",
+      "otc_diphenhydramine",
+      "otc_loperamide",
+      "otc_iron_supplements",
+      "dietary_supplements",
+      "household_chemicals",
+      "methanol_preparations",
+      "ethylene_glycol",
+      "mouthwash_with_ethanol",
+      "nicotine_products"
+    ],
+    "exemptions": [
+      "single_dose_non_prescription",
+      "elderly_patient_request",
+      "physician_request_non_child_resistant"
+    ],
+    "source_url": "https://www.ecfr.gov/current/title-16/chapter-II/subchapter-E/part-1700",
+    "data_source": "manually_compiled"
+  },
+  {
+    "code": "FDA CPG 450.500",
+    "title": "FDA Compliance Policy Guide Sec. 450.500 — Tamper-Evident Packaging Requirements for OTC Drug Products",
+    "full_text": "CPG Sec. 450.500 Tamper-Evident Packaging Requirements for Over-the-Counter (OTC) Human Drug Products\n\nBACKGROUND:\nThe tamper-evident packaging regulation for OTC drug products, 21 CFR 211.132, was originally issued in 1982 following the Tylenol poisoning incidents. The rule was revised in 1998 to strengthen packaging requirements.\n\nPOLICY:\nFDA considers the following types of packaging to be tamper-evident:\n\n(1) Film wrappers — A transparent film is wrapped securely around an individual product or product container. The film must be cut or torn to open and remove the product.\n\n(2) Blister or strip packs — The product and container are sealed in individual compartments formed from thermoformed plastic, clear or opaque. The backing material must be broken through or peeled off to access the product.\n\n(3) Bubble packs — The product is enclosed in individual plastic bubbles affixed to a backing card. The bubble must be broken to remove the product.\n\n(4) Shrink seals and bands — Preformed bands or wrappers with a heat-applied tight fit are placed around the closure or container. The seal must be torn or broken to open the container.\n\n(5) Foil, paper, or plastic pouches — The product is enclosed in an individual pouch that must be torn or broken to obtain the product.\n\n(6) Bottle seals — A paper, thermal, or plastic seal is bonded to the mouth of a container under the cap. The seal must be torn or broken to open the container and remove the product.\n\n(7) Tape seals — Tape is applied over all carton flaps or bottle cap-to-container junctions. The tape must be torn or broken to open the container.\n\n(8) Breakable caps — The container is sealed by a cap that either breaks upon opening or has a visible band that separates from the cap upon opening.\n\n(9) Sealed tubes — The mouth of the tube is sealed and the seal must be punctured to access the product.\n\n(10) Sealed cartons — All flaps of the carton are sealed and the carton must be visibly damaged upon opening.\n\nREGULATORY ACTION GUIDANCE:\nProducts not meeting tamper-evident packaging requirements may be subject to regulatory action. Manufacturers are expected to incorporate at least one tamper-evident feature and include a labeling statement alerting consumers. Products found in violation may be deemed adulterated under Section 501(a)(2)(B) of the Federal Food, Drug, and Cosmetic Act or misbranded under Section 502.",
+    "summary": "This FDA Compliance Policy Guide provides detailed guidance on acceptable tamper-evident packaging methods for OTC drugs, including film wrappers, blister packs, shrink bands, bottle seals, tape seals, breakable caps, and sealed tubes. It establishes that products not meeting these requirements may be deemed adulterated or misbranded and subject to regulatory action.",
+    "applies_to": [
+      "otc_oral",
+      "otc_nasal",
+      "otc_ophthalmic",
+      "otc_rectal",
+      "otc_vaginal",
+      "otc_otic"
+    ],
+    "exemptions": [
+      "dermatological",
+      "dentifrice",
+      "insulin",
+      "lozenge"
+    ],
+    "source_url": "https://www.fda.gov/regulatory-information/search-fda-guidance-documents",
+    "data_source": "manually_compiled"
+  },
+  {
+    "code": "18 U.S.C. 1365",
+    "title": "Federal Anti-Tampering Act",
+    "full_text": "18 U.S.C. Sec. 1365 — Tampering with consumer products\n\n(a) Whoever, with reckless disregard for the risk that another person will be placed in danger of death or bodily injury and under circumstances manifesting extreme indifference to such risk, tampers with any consumer product that affects interstate or foreign commerce, or the labeling of, or container for, any such product, or attempts to do so, shall—\n(1) in the case of an attempt, be fined under this title or imprisoned not more than 10 years, or both;\n(2) if death of any person results, be fined under this title or imprisoned for any term of years or for life, or both;\n(3) if serious bodily injury to any person results, be fined under this title or imprisoned not more than 20 years, or both; and\n(4) in any other case, be fined under this title or imprisoned not more than 10 years, or both.\n\n(b) Whoever, with intent to cause serious injury to the business of any person, taints any consumer product or renders materially false or misleading the labeling of, or container for, a consumer product, if such consumer product affects interstate or foreign commerce, shall be fined under this title or imprisoned not more than 3 years, or both.\n\n(c)(1) Whoever knowingly communicates false information that a consumer product has been tainted, if such product or the results of such communication affect interstate or foreign commerce, and if such communication places a person in reasonable fear of death or bodily injury, shall be fined under this title or imprisoned not more than 5 years, or both.\n(2) Whoever threatens to taint a consumer product affecting interstate or foreign commerce, with intent to extort anything of value, shall be fined under this title or imprisoned not more than 3 years, or both.\n\n(d) As used in this section—\n(1) the term \"consumer product\" means any food, drug, device, cosmetic, or other article or component thereof, which is customarily produced or distributed for sale to, or use, consumption, or enjoyment by a consumer;\n(2) the term \"tamper\" means to alter or make an unauthorized addition to a product, its container, or labeling to make the product harmful or to make the product appear harmful;\n(3) the term \"taint\" means to introduce or add a harmful substance to a consumer product.\n\n(e) Whoever violates subsection (a) of this section involving a consumer product that is a food, drug, device, cosmetic, or other article generally intended for the protection and promotion of public health and safety, and the violation creates a risk of death or serious bodily injury, shall be subject to enhanced penalties as the court may determine.\n\n(f) In addition to the penalties prescribed in this section, the court may order restitution to victims.\n\n(g) With respect to any violation of this section involving a threat, attempts, or conspiratorial acts, Federal jurisdiction exists to investigate and prosecute such offenses regardless of whether actual tampering occurred.",
+    "summary": "The Federal Anti-Tampering Act makes it a federal crime to tamper with consumer products, their labels, or containers, with penalties ranging up to life imprisonment if death results. It also criminalizes tainting products to harm a business, communicating false tampering information, and threatening to taint products for extortion. This statute provides the criminal enforcement backbone for tamper-evident packaging regulations.",
+    "applies_to": [
+      "all_consumer_products",
+      "food",
+      "drugs",
+      "devices",
+      "cosmetics"
+    ],
+    "exemptions": [],
+    "source_url": "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title18-section1365&num=0&edition=prelim",
+    "data_source": "manually_compiled"
+  },
+  {
+    "code": "DSHEA / FSMA",
+    "title": "Dietary Supplement Health and Education Act & Food Safety Modernization Act — Packaging Requirements",
+    "full_text": "The Dietary Supplement Health and Education Act of 1994 (DSHEA) established dietary supplements as a distinct regulatory category under the Federal Food, Drug, and Cosmetic Act. Under DSHEA and the FDA's current Good Manufacturing Practice (cGMP) regulations for dietary supplements (21 CFR Part 111), manufacturers must establish and follow process controls for packaging and labeling operations. Specifically, 21 CFR 111.410 through 111.430 require that packaging and labels be stored, handled, and applied in a manner that prevents mix-ups, contamination, and tampering.\n\nThe Food Safety Modernization Act (FSMA), signed into law in 2011, further strengthened the FDA's authority over food safety, including preventive controls, supply chain verification, and intentional adulteration prevention. FSMA's Intentional Adulteration rule (21 CFR Part 121) requires food facilities to identify and implement strategies to significantly minimize or prevent intentional adulteration, including tampering with food products.\n\nWhile DSHEA and FSMA do not contain a single regulation identical in structure to 21 CFR 211.132 for dietary supplements, the FDA applies tamper-evident packaging expectations to dietary supplements through cGMP enforcement and considers the absence of tamper-evident packaging on dietary supplements to be a cGMP violation. In practice, the dietary supplement industry widely uses tamper-evident packaging (foil seals, shrink bands, blister packs) as a standard practice, and the FDA has taken enforcement action against supplement manufacturers whose products lacked adequate tamper-evident features.",
+    "summary": "DSHEA and FSMA together establish the regulatory framework for dietary supplement packaging and food safety. While there is no single tamper-evident packaging regulation equivalent to 21 CFR 211.132 for supplements, the FDA enforces tamper-evident packaging expectations through cGMP regulations (21 CFR Part 111) and considers the absence of such features a violation. FSMA additionally addresses intentional adulteration prevention for food products.",
+    "applies_to": [
+      "dietary_supplements",
+      "vitamins",
+      "minerals",
+      "herbal_products",
+      "amino_acids",
+      "probiotics"
+    ],
+    "exemptions": [],
+    "source_url": "https://www.fda.gov/food/dietary-supplements",
+    "data_source": "manually_compiled"
+  }
+]

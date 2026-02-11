@@ -1,0 +1,735 @@
+"""
+Subagent 0C: Generate seal types reference data for SealCheck app.
+
+This script:
+1. Attempts to scrape FDA and CPSC websites for tamper-evident packaging info
+2. Saves any raw scraped content to data/raw/ for reference
+3. Generates a comprehensive data/seal_types.json from expert knowledge
+
+Even if scraping yields limited results, the seal types data is created from
+well-established packaging industry knowledge and FDA/CPSC guidance.
+"""
+
+import json
+import os
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+# Resolve project paths
+SCRIPT_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = SCRIPT_DIR.parent
+DATA_DIR = PROJECT_ROOT / "data"
+RAW_DIR = DATA_DIR / "raw"
+OUTPUT_FILE = DATA_DIR / "seal_types.json"
+
+# Ensure directories exist
+DATA_DIR.mkdir(exist_ok=True)
+RAW_DIR.mkdir(exist_ok=True)
+
+
+def attempt_scrape():
+    """
+    Attempt to scrape FDA and CPSC pages for tamper-evident packaging info.
+    Saves raw content to data/raw/ regardless of quality.
+    Returns a dict of source -> extracted text (may be empty).
+    """
+    scraped = {}
+
+    try:
+        import requests
+        from bs4 import BeautifulSoup
+    except ImportError:
+        print("[WARN] requests or beautifulsoup4 not installed. Skipping scrape.")
+        return scraped
+
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/120.0.0.0 Safari/537.36"
+        ),
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    }
+
+    sources = [
+        {
+            "name": "fda_consumers",
+            "url": "https://www.fda.gov/consumers",
+            "description": "FDA Consumer Updates page",
+        },
+        {
+            "name": "cpsc_home",
+            "url": "https://www.cpsc.gov/",
+            "description": "CPSC homepage",
+        },
+        {
+            "name": "fda_otc_tamper_evident",
+            "url": "https://www.fda.gov/drugs/drug-information-consumers/buying-using-medicine-safely",
+            "description": "FDA guidance on buying/using medicine safely",
+        },
+    ]
+
+    for source in sources:
+        name = source["name"]
+        url = source["url"]
+        desc = source["description"]
+        print(f"\n[SCRAPE] Attempting: {desc}")
+        print(f"         URL: {url}")
+
+        try:
+            resp = requests.get(url, headers=headers, timeout=15)
+            resp.raise_for_status()
+
+            # Save raw HTML
+            raw_path = RAW_DIR / f"{name}.html"
+            raw_path.write_text(resp.text, encoding="utf-8")
+            print(f"  [OK] Saved raw HTML ({len(resp.text):,} bytes) -> {raw_path.name}")
+
+            # Parse and extract text content
+            soup = BeautifulSoup(resp.text, "html.parser")
+
+            # Remove script/style elements
+            for tag in soup(["script", "style", "nav", "footer", "header"]):
+                tag.decompose()
+
+            # Extract main content area
+            main = soup.find("main") or soup.find("div", {"role": "main"}) or soup.find("body")
+            if main:
+                text = main.get_text(separator="\n", strip=True)
+            else:
+                text = soup.get_text(separator="\n", strip=True)
+
+            # Save extracted text
+            text_path = RAW_DIR / f"{name}_text.txt"
+            text_path.write_text(text, encoding="utf-8")
+            print(f"  [OK] Saved extracted text ({len(text):,} chars) -> {text_path.name}")
+
+            # Look for tamper-evident related content
+            keywords = ["tamper", "seal", "packaging", "safety", "intact", "broken"]
+            relevant_lines = []
+            for line in text.split("\n"):
+                line_lower = line.lower()
+                if any(kw in line_lower for kw in keywords):
+                    relevant_lines.append(line.strip())
+
+            if relevant_lines:
+                scraped[name] = "\n".join(relevant_lines)
+                print(f"  [OK] Found {len(relevant_lines)} relevant lines about tamper-evident packaging")
+            else:
+                print(f"  [INFO] No directly relevant tamper-evident content found on this page")
+
+        except requests.exceptions.RequestException as e:
+            print(f"  [FAIL] Could not fetch: {e}")
+        except Exception as e:
+            print(f"  [FAIL] Error processing: {e}")
+
+        # Respect rate limits
+        time.sleep(1.5)
+
+    return scraped
+
+
+def build_seal_types_data():
+    """
+    Build comprehensive seal types reference data.
+    This is well-established packaging industry information based on
+    FDA 21 CFR 211.132 definitions and CPSC guidance.
+    """
+    seal_types = [
+        {
+            "name": "Foil Inner Seal",
+            "slug": "foil-inner-seal",
+            "description": (
+                "A thin metallic foil sealed to the opening of the container beneath the cap. "
+                "These seals are heat-bonded or pressure-bonded to the rim of the bottle, "
+                "creating an airtight barrier. They must be intact and fully adhered to the "
+                "container opening — any peeling, puncture, or absence means the product "
+                "may have been tampered with."
+            ),
+            "common_products": [
+                "pill bottles",
+                "liquid medications",
+                "dietary supplements",
+                "vitamins",
+                "protein powder",
+                "spice jars",
+                "infant formula"
+            ],
+            "how_to_check": (
+                "Remove the cap and look for a smooth, unbroken foil covering the entire "
+                "opening of the container. The foil should be fully sealed to the rim with "
+                "no gaps, tears, wrinkles, or signs of re-adhesion. A properly sealed foil "
+                "requires effort to peel away. If the foil is missing, partially lifted, "
+                "punctured, or has residue suggesting it was removed and replaced, do not "
+                "use the product."
+            ),
+            "signs_of_tampering": [
+                "Foil is missing entirely",
+                "Foil is partially peeled back or lifted at the edges",
+                "Visible puncture holes or tears in the foil",
+                "Foil appears wrinkled, re-adhered, or unevenly sealed",
+                "Adhesive residue around the rim suggesting the foil was removed and replaced",
+                "Foil is a different color or texture than expected for the brand",
+                "Product residue or leaking visible around the foil edges"
+            ]
+        },
+        {
+            "name": "Shrink Band",
+            "slug": "shrink-band",
+            "description": (
+                "A plastic band that wraps tightly around the junction where the cap meets "
+                "the bottle or container neck. The band is heat-shrunk into place during "
+                "manufacturing and must be broken or torn to open the product for the first "
+                "time. A missing, loose, or torn shrink band is a clear sign that the "
+                "container may have been opened before."
+            ),
+            "common_products": [
+                "mouthwash",
+                "beverages",
+                "sauces and condiments",
+                "vinegar",
+                "cooking oils",
+                "liquid medications",
+                "sports drinks"
+            ],
+            "how_to_check": (
+                "Look at the area where the cap meets the bottle neck. You should see a "
+                "clear or colored plastic band wrapped tightly around this junction. The "
+                "band should be smooth, snug, and continuous with no breaks or cuts. When "
+                "you twist the cap to open the product for the first time, this band should "
+                "tear or separate cleanly. If the band is already broken, missing, or loose "
+                "before you open it, the product may have been tampered with."
+            ),
+            "signs_of_tampering": [
+                "Shrink band is missing entirely",
+                "Band is split, torn, or has visible cuts",
+                "Band is loose or slides freely up and down",
+                "Band appears to have been re-applied or re-shrunk (uneven texture, bubbles)",
+                "Band color or printing does not match the brand's usual packaging",
+                "Perforations in the band are already broken",
+                "Band shows signs of being cut and re-glued"
+            ]
+        },
+        {
+            "name": "Breakable Cap",
+            "slug": "breakable-cap",
+            "description": (
+                "A cap with a detachable ring (also called a pilfer-proof or tamper-evident "
+                "ring) connected by small plastic bridges. When the cap is twisted open for "
+                "the first time, the bridges snap and the ring stays behind on the bottle "
+                "neck. This is one of the most common tamper-evident features on bottled "
+                "products. Once the bridges are broken, they cannot be reattached."
+            ),
+            "common_products": [
+                "bottled water",
+                "soda and soft drinks",
+                "juice",
+                "over-the-counter liquid medications",
+                "cough syrup",
+                "rubbing alcohol",
+                "hydrogen peroxide",
+                "contact lens solution"
+            ],
+            "how_to_check": (
+                "Before opening, look at the bottom edge of the cap. You should see a "
+                "separate ring connected to the cap by thin plastic bridges or tabs. When "
+                "you twist the cap for the first time, you should feel and hear these bridges "
+                "snapping. After opening, the ring should remain on the bottle neck and the "
+                "bridges should be visibly broken. If the ring is already detached, the "
+                "bridges are pre-broken, or the cap spins freely without resistance, the "
+                "product may have been opened before."
+            ),
+            "signs_of_tampering": [
+                "Ring at the bottom of the cap is already separated or broken",
+                "Plastic bridges between cap and ring are pre-snapped",
+                "Cap spins freely without any resistance or snapping",
+                "Ring is missing from the bottle neck",
+                "Cap appears to have been removed and replaced (misaligned, loose)",
+                "Visible tool marks or cuts on the ring or bridges",
+                "Ring is cracked or deformed"
+            ]
+        },
+        {
+            "name": "Film Wrapper",
+            "slug": "film-wrapper",
+            "description": (
+                "A clear or printed plastic film (cellophane or polyethylene) that tightly "
+                "wraps around the entire product or its container. The wrapper must be "
+                "removed or torn to access the product. Film wrappers are commonly found "
+                "on boxed items, and often include a pull tab or tear strip for easy opening. "
+                "An intact film wrapper indicates the product has not been opened since it "
+                "left the manufacturer."
+            ),
+            "common_products": [
+                "boxed medications",
+                "cigarettes",
+                "cosmetics",
+                "playing cards",
+                "DVDs and media",
+                "boxed tea and food items",
+                "over-the-counter drug boxes"
+            ],
+            "how_to_check": (
+                "Examine the outside of the product for a tight, transparent plastic film "
+                "covering the entire package. The film should be smooth, wrinkle-free, and "
+                "sealed on all sides. Look for a pull tab or tear strip that allows clean "
+                "removal. If the film is missing, has holes, appears re-wrapped, or has "
+                "been opened and re-sealed with tape or glue, do not purchase or use the "
+                "product."
+            ),
+            "signs_of_tampering": [
+                "Film wrapper is missing entirely",
+                "Visible holes, tears, or cuts in the film",
+                "Film is loose or bunched rather than tight and smooth",
+                "Wrapper appears to have been re-applied (wrinkles, uneven sealing, excess material)",
+                "Pull tab or tear strip has already been used or is missing",
+                "Film has been opened and re-sealed with tape or adhesive",
+                "Film appears to be a different type or thickness than usual for the brand"
+            ]
+        },
+        {
+            "name": "Sealed Blister Pack",
+            "slug": "sealed-blister-pack",
+            "description": (
+                "Individual doses of a product (usually pills, tablets, or capsules) sealed "
+                "between a clear plastic blister and a foil or paperboard backing. Each dose "
+                "is contained in its own sealed pocket that must be pushed through or peeled "
+                "open to access. Blister packs are considered one of the most tamper-evident "
+                "packaging forms because each individual dose is separately sealed."
+            ),
+            "common_products": [
+                "allergy medications",
+                "cold and flu tablets",
+                "pain relievers",
+                "antacids",
+                "gum and lozenges",
+                "batteries",
+                "prescription medications",
+                "birth control pills"
+            ],
+            "how_to_check": (
+                "Examine each individual blister pocket. The clear plastic bubble should be "
+                "intact and firmly sealed to the foil or paperboard backing. Check that no "
+                "blisters have been popped, punctured, or peeled open. The backing material "
+                "should show no signs of being separated and re-sealed. If any pocket is "
+                "empty (when it shouldn't be), opened, or shows damage, do not use any "
+                "doses from that pack."
+            ),
+            "signs_of_tampering": [
+                "One or more blister pockets have been opened or are empty",
+                "Foil backing is punctured, torn, or peeled away from the plastic",
+                "Plastic blister bubbles are cracked or deformed",
+                "Backing shows signs of being separated and re-glued",
+                "Tablets or pills are visible through damaged packaging",
+                "Blister pack is loose inside the outer box (secondary packaging opened)",
+                "Individual pockets contain pills that look different from the others"
+            ]
+        },
+        {
+            "name": "Vacuum Button (Safety Button)",
+            "slug": "vacuum-button",
+            "description": (
+                "A raised or concave button on metal jar lids that pops up when the vacuum "
+                "seal is broken. When a jar is properly sealed under vacuum, the button on "
+                "the lid is pulled flat or slightly concave and does not move when pressed. "
+                "Once the jar is opened and the vacuum is released, the button pops up and "
+                "stays raised. This is one of the simplest and most reliable tamper-evident "
+                "indicators for jarred food products."
+            ),
+            "common_products": [
+                "salsa and sauces",
+                "pickles and relish",
+                "jams and jellies",
+                "pasta sauce",
+                "baby food jars",
+                "honey",
+                "peanut butter (glass jars)",
+                "canned goods with pop-up lids"
+            ],
+            "how_to_check": (
+                "Before purchasing, press the button on the center of the jar lid. If the "
+                "jar is properly sealed, the button should be flat or slightly concave and "
+                "should not click, flex, or move when pressed. When you open the jar at "
+                "home for the first time, you should hear a distinct pop or hiss as the "
+                "vacuum seal breaks, and the button should pop up permanently. If the button "
+                "is already raised, clicks up and down freely, or you do not hear a pop "
+                "when opening, the seal may have been broken."
+            ),
+            "signs_of_tampering": [
+                "Safety button is already popped up (raised) before opening",
+                "Button clicks or flexes up and down when pressed",
+                "No popping sound or hiss of air when the jar is opened for the first time",
+                "Lid is loose or can be turned without resistance",
+                "Visible damage to the lid or jar rim",
+                "Rust, dents, or corrosion on the lid that could compromise the seal",
+                "Sticky residue around the lid suggesting it was opened and reclosed"
+            ]
+        },
+        {
+            "name": "Tape Seal",
+            "slug": "tape-seal",
+            "description": (
+                "Adhesive tape applied over the opening, flaps, or seams of a box or "
+                "container to show evidence of opening. Tamper-evident tape often includes "
+                "special features like printed patterns, void messages (the word 'OPENED' or "
+                "'VOID' appears when the tape is peeled), or destructible materials that "
+                "shred when removed. Standard tape seals must be cut or torn to access the "
+                "product inside."
+            ),
+            "common_products": [
+                "electronics packaging",
+                "over-the-counter medication boxes",
+                "medical device packaging",
+                "board games and toys",
+                "food boxes",
+                "shipping containers",
+                "cosmetics boxes"
+            ],
+            "how_to_check": (
+                "Look for tape or adhesive labels sealing the box flaps or container opening. "
+                "The tape should be smooth, fully adhered, and unbroken. Many tamper-evident "
+                "tapes will display the word 'VOID' or 'OPENED' if someone has peeled them "
+                "up. Check that the tape has not been cut and re-applied, and that the box "
+                "flaps underneath have not been previously opened. If the tape is missing, "
+                "shows void markings, or looks re-applied, the package may have been opened."
+            ),
+            "signs_of_tampering": [
+                "Tape is missing or has been removed",
+                "Tape shows 'VOID' or 'OPENED' message (tamper-evident tape was peeled)",
+                "Tape appears re-applied (bubbles, wrinkles, misalignment)",
+                "Tape has been cut with a blade rather than torn",
+                "Adhesive residue visible where tape was removed and reapplied",
+                "Multiple layers of tape suggesting re-sealing",
+                "Box flaps underneath are bent or show signs of prior opening"
+            ]
+        },
+        {
+            "name": "Sealed Sachets/Pouches",
+            "slug": "sealed-sachets-pouches",
+            "description": (
+                "Individual sealed packets or pouches made of foil, plastic, or a "
+                "combination of materials. The edges of the sachet are heat-sealed or "
+                "crimped shut during manufacturing, creating a single-use container that "
+                "must be torn open to access the contents. These are commonly used for "
+                "single-dose medications, condiments, and individual food servings. Each "
+                "sachet acts as its own tamper-evident package."
+            ),
+            "common_products": [
+                "single-dose medications (powders and liquids)",
+                "condiment packets (ketchup, mustard, mayo)",
+                "instant drink mixes",
+                "sugar and sweetener packets",
+                "wet wipes and cleansing pads",
+                "hand sanitizer packets",
+                "individual snack portions",
+                "electrolyte powder packets"
+            ],
+            "how_to_check": (
+                "Examine the sealed edges of the sachet or pouch. The seal should be "
+                "continuous, smooth, and free of gaps. Squeeze the packet gently — it should "
+                "feel firm and pressurized (for liquids or gels) or resist compression "
+                "slightly (for powders). The packet should require deliberate tearing or "
+                "cutting to open. If the seal is broken, leaking, puffed up abnormally, "
+                "or shows signs of having been opened and re-sealed, do not use the product."
+            ),
+            "signs_of_tampering": [
+                "Seal edges are open, separated, or have gaps",
+                "Sachet is leaking or contents are visible at the seal",
+                "Packet feels deflated or has lost pressure",
+                "Abnormal puffing or swelling of the packet",
+                "Seal area shows heat marks or discoloration from re-sealing",
+                "Contents are a different color, texture, or consistency than expected",
+                "Packet is sticky on the outside from leaking contents",
+                "Tear notch has already been used or extended"
+            ]
+        },
+        {
+            "name": "Glued Carton Flaps",
+            "slug": "glued-carton-flaps",
+            "description": (
+                "Cardboard box flaps sealed with adhesive during manufacturing. The glue "
+                "bonds the flaps together so that opening the box for the first time "
+                "requires tearing the cardboard fibers, leaving visible and irreversible "
+                "evidence of opening. Many pharmaceutical and food cartons use this as a "
+                "primary or supplementary tamper-evident feature. Once the fiber-tear pattern "
+                "is created, it cannot be re-sealed to look original."
+            ),
+            "common_products": [
+                "over-the-counter medication boxes",
+                "toothpaste boxes",
+                "cereal and food boxes",
+                "tea boxes",
+                "cosmetics packaging",
+                "bandage boxes",
+                "cold and flu remedy boxes",
+                "dietary supplement boxes"
+            ],
+            "how_to_check": (
+                "Check both ends (top and bottom flaps) of the carton. The flaps should be "
+                "firmly glued shut. When you open the box for the first time, you should see "
+                "the cardboard fibers tearing apart, leaving a rough, fibrous surface that "
+                "clearly shows the box has been opened. Before purchasing, check that the "
+                "flaps are securely sealed and the cardboard surface is smooth and intact "
+                "with no fiber-tear marks, re-gluing, or separating seams."
+            ),
+            "signs_of_tampering": [
+                "Carton flaps are already open or loosely closed",
+                "Visible fiber-tear patterns on the flap surfaces before first opening",
+                "Flaps appear re-glued (excess glue, misaligned flaps, glue smears)",
+                "Cardboard surface is damaged, wrinkled, or shows water stains near the seal",
+                "Different types of adhesive visible (original glue plus re-applied glue)",
+                "Flaps do not line up properly or are misaligned from the original fold",
+                "Inner contents are accessible without breaking the seal"
+            ]
+        },
+        {
+            "name": "Neckband",
+            "slug": "neckband",
+            "description": (
+                "A small, narrow band positioned just below the cap on a bottle, typically "
+                "at the very top of the bottle neck. Similar to a shrink band but smaller "
+                "and more focused, neckbands serve specifically as a tamper indicator at the "
+                "cap junction. They are often perforated to allow clean separation when the "
+                "cap is first removed. This is a variation of shrink band technology that "
+                "provides a more targeted tamper-evident feature."
+            ),
+            "common_products": [
+                "wine and spirits",
+                "olive oil",
+                "premium sauces",
+                "vanilla extract",
+                "maple syrup",
+                "hot sauce",
+                "some pharmaceutical liquids",
+                "essential oils"
+            ],
+            "how_to_check": (
+                "Look for a narrow plastic or foil band wrapped tightly around the area "
+                "just below where the cap sits on the bottle. The band should be smooth, "
+                "tight, and unbroken. It may have perforations (a dotted tear line) to "
+                "allow easy removal when the cap is first unscrewed. Before opening, verify "
+                "that the band is intact and has not been cut, torn, or previously separated. "
+                "If the band is missing, pre-torn, or visibly tampered with, do not use "
+                "the product."
+            ),
+            "signs_of_tampering": [
+                "Neckband is missing or has fallen off",
+                "Band is pre-torn or the perforations are already broken",
+                "Band is loose, wrinkled, or not snug against the bottle",
+                "Band has been cut with a sharp instrument",
+                "Visible signs of re-application (glue marks, overlapping edges)",
+                "Band color or print does not match the product's usual branding",
+                "Band has shifted position on the bottle neck"
+            ]
+        },
+        {
+            "name": "Inner Tube Seal",
+            "slug": "inner-tube-seal",
+            "description": (
+                "A sealed membrane or foil covering the opening of a tube, positioned "
+                "beneath the screw cap. When a tube of toothpaste, ointment, or cream is "
+                "new, this inner seal must be punctured (usually with the pointed cap tip "
+                "or a separate tool) before the product can be dispensed. The sealed membrane "
+                "ensures that the tube contents have not been accessed or contaminated since "
+                "manufacturing."
+            ),
+            "common_products": [
+                "toothpaste",
+                "topical ointments and creams",
+                "antibiotic ointments (Neosporin)",
+                "hydrocortisone cream",
+                "hemorrhoid cream",
+                "sunscreen (tube format)",
+                "hand cream and lotion tubes",
+                "acne treatments"
+            ],
+            "how_to_check": (
+                "Unscrew the cap from the tube and check the opening. There should be a "
+                "sealed foil or plastic membrane covering the tube opening. The membrane "
+                "should be intact, smooth, and fully sealed across the entire opening. Many "
+                "caps have a pointed tip on the inside specifically designed to puncture this "
+                "seal. If the membrane is already punctured, missing, or partially peeled "
+                "when you first open the cap, the product may have been tampered with. "
+                "Also check that no product has leaked past the seal."
+            ),
+            "signs_of_tampering": [
+                "Membrane is already punctured or has holes when first opening",
+                "Seal is missing entirely from the tube opening",
+                "Membrane is partially peeled or detached from the tube rim",
+                "Product residue visible around or on top of the seal",
+                "Seal appears to have been punctured and covered or re-sealed",
+                "Tube feels partially empty or contents seem reduced for a new product",
+                "Product is visible or leaking at the tube opening before the seal is broken"
+            ]
+        },
+        {
+            "name": "Printed Shrink Sleeve",
+            "slug": "printed-shrink-sleeve",
+            "description": (
+                "A full-body printed plastic sleeve that is heat-shrunk to conform tightly "
+                "to the shape of the entire container, covering both the body and extending "
+                "over the cap junction. Unlike a simple shrink band, a printed shrink sleeve "
+                "covers a larger portion of the container (often the full label area and cap) "
+                "and typically serves as both the product label and the tamper-evident feature. "
+                "It must be torn or cut through to access the cap, providing clear evidence "
+                "of first opening."
+            ),
+            "common_products": [
+                "energy drinks",
+                "yogurt drinks",
+                "protein shakes",
+                "dairy products",
+                "premium beverages",
+                "cleaning products",
+                "some pharmaceutical products",
+                "meal replacement drinks"
+            ],
+            "how_to_check": (
+                "Examine the plastic sleeve covering the product. It should be a single, "
+                "continuous printed sleeve that fits snugly around the container with no "
+                "gaps or looseness. At the cap area, the sleeve should extend over the "
+                "cap-to-bottle junction, and there should be a perforated tear line or "
+                "designated area to tear through the sleeve to access the cap. If the sleeve "
+                "is already torn near the cap, has been cut, is loose, or shows signs of "
+                "re-application, the product may have been tampered with."
+            ),
+            "signs_of_tampering": [
+                "Sleeve is torn near the cap area before first opening",
+                "Perforated tear line has already been broken",
+                "Sleeve is loose or does not conform tightly to the container",
+                "Sleeve appears to have been removed and re-applied (seams misaligned, bubbles, wrinkles)",
+                "Printing is smudged, faded, or does not match the brand's usual appearance",
+                "Sleeve has cuts or slits that were not part of the original design",
+                "Cap is accessible without tearing through the sleeve",
+                "Sleeve shows heat damage or deformation from attempted re-shrinking"
+            ]
+        },
+    ]
+
+    return seal_types
+
+
+def validate_seal_types(seal_types):
+    """Validate the seal types data structure and content."""
+    required_fields = ["name", "slug", "description", "common_products", "how_to_check", "signs_of_tampering"]
+    errors = []
+    slugs_seen = set()
+
+    for i, seal in enumerate(seal_types):
+        prefix = f"Seal type #{i+1} ({seal.get('name', 'UNNAMED')})"
+
+        # Check required fields
+        for field in required_fields:
+            if field not in seal:
+                errors.append(f"{prefix}: missing required field '{field}'")
+            elif field in ("common_products", "signs_of_tampering"):
+                if not isinstance(seal[field], list) or len(seal[field]) == 0:
+                    errors.append(f"{prefix}: '{field}' must be a non-empty list")
+            elif not isinstance(seal[field], str) or len(seal[field].strip()) == 0:
+                errors.append(f"{prefix}: '{field}' must be a non-empty string")
+
+        # Check slug uniqueness
+        slug = seal.get("slug", "")
+        if slug in slugs_seen:
+            errors.append(f"{prefix}: duplicate slug '{slug}'")
+        slugs_seen.add(slug)
+
+        # Check slug format
+        if slug and not all(c.isalnum() or c == "-" for c in slug):
+            errors.append(f"{prefix}: slug contains invalid characters: '{slug}'")
+
+        # Validate description length (should be substantive)
+        desc = seal.get("description", "")
+        if len(desc) < 50:
+            errors.append(f"{prefix}: description is too short ({len(desc)} chars)")
+
+        # Validate how_to_check length
+        check = seal.get("how_to_check", "")
+        if len(check) < 50:
+            errors.append(f"{prefix}: how_to_check is too short ({len(check)} chars)")
+
+        # Validate signs_of_tampering has enough entries
+        signs = seal.get("signs_of_tampering", [])
+        if isinstance(signs, list) and len(signs) < 3:
+            errors.append(f"{prefix}: signs_of_tampering should have at least 3 entries (has {len(signs)})")
+
+    return errors
+
+
+def main():
+    print("=" * 70)
+    print("SealCheck — Seal Types Reference Data Generator")
+    print("Subagent 0C: Build the seal types reference data")
+    print("=" * 70)
+
+    # Step 1: Attempt to scrape FDA/CPSC
+    print("\n--- Step 1: Attempting to scrape FDA/CPSC sources ---")
+    scraped_data = attempt_scrape()
+
+    # Save scrape summary
+    scrape_summary = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "sources_attempted": 3,
+        "sources_with_relevant_content": len(scraped_data),
+        "note": (
+            "Scraping FDA/CPSC for tamper-evident packaging info. "
+            "Even with limited scrape results, seal types data is built from "
+            "well-established packaging industry knowledge and FDA 21 CFR 211.132 guidance."
+        ),
+        "scraped_content": scraped_data if scraped_data else "No directly relevant content extracted",
+    }
+    summary_path = RAW_DIR / "scrape_summary_seal_types.json"
+    summary_path.write_text(json.dumps(scrape_summary, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"\n[OK] Scrape summary saved to {summary_path}")
+
+    # Step 2: Build comprehensive seal types data
+    print("\n--- Step 2: Building comprehensive seal types data ---")
+    seal_types = build_seal_types_data()
+    print(f"[OK] Built {len(seal_types)} seal type entries")
+
+    # Step 3: Validate
+    print("\n--- Step 3: Validating data ---")
+    errors = validate_seal_types(seal_types)
+    if errors:
+        print(f"[ERROR] Validation found {len(errors)} issue(s):")
+        for err in errors:
+            print(f"  - {err}")
+        sys.exit(1)
+    else:
+        print("[OK] All seal types passed validation")
+
+    # Step 4: Write output JSON
+    print("\n--- Step 4: Writing output file ---")
+    OUTPUT_FILE.write_text(
+        json.dumps(seal_types, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8"
+    )
+    print(f"[OK] Wrote {OUTPUT_FILE}")
+
+    # Step 5: Print summary
+    print("\n--- Summary ---")
+    print(f"Total seal types: {len(seal_types)}")
+    print(f"Output file: {OUTPUT_FILE}")
+    print(f"File size: {OUTPUT_FILE.stat().st_size:,} bytes")
+    print("\nSeal types defined:")
+    for seal in seal_types:
+        n_products = len(seal["common_products"])
+        n_signs = len(seal["signs_of_tampering"])
+        print(f"  - {seal['name']} ({seal['slug']}): {n_products} products, {n_signs} tampering signs")
+
+    # Validate JSON is parseable
+    print("\n--- Verification: Re-reading and parsing JSON ---")
+    with open(OUTPUT_FILE, "r", encoding="utf-8") as f:
+        parsed = json.load(f)
+    assert len(parsed) == len(seal_types), "Mismatch in seal type count after re-reading"
+    print(f"[OK] JSON is valid and contains {len(parsed)} seal types")
+
+    print("\n" + "=" * 70)
+    print("Subagent 0C complete. Seal types reference data generated successfully.")
+    print("=" * 70)
+
+
+if __name__ == "__main__":
+    main()
