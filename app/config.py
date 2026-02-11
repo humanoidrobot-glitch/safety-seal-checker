@@ -8,8 +8,8 @@ class Settings(BaseSettings):
     app_name: str = "SealCheck API"
     debug: bool = False
 
-    # Database
-    database_url: str = "postgresql://sealcheck:sealcheck@localhost:5432/sealcheck"
+    # Database (required — set DATABASE_URL in .env)
+    database_url: str
 
     # CORS
     cors_origins: list[str] = ["*"]
